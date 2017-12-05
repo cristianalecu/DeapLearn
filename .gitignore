@@ -1,0 +1,6 @@
+.metadata/
+
+.project
+.pydevproject
+
+Jupyter/.ipynb_checkpoints/
