@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import pickle
 import pandas as pd
+import datetime
 
 mem = {}
 
@@ -23,9 +24,10 @@ if not 'last_date' in mem.keys():
 if not 'monezi' in mem.keys():
     mem["monezi"] = {}
     
+mem["last_date"] = datetime.datetime.strptime(mem["last_date"], "%Y-%m-%d")    #.strftime("%Y-%m-%d") 
 try:
     r = requests.get("https://www.cursbnr.ro/arhiva-curs-bnr-2005-01-03"
-        , proxies=dict(http="http://cna:6yuiop[]@192.168.1.29:8080", https="https://cna:6yuiop[]@192.168.1.29:8080")
+        #, proxies=dict(http="http://cna:6yuiop[]@192.168.1.29:8080", https="https://cna:6yuiop[]@192.168.1.29:8080")
         )
 except ConnectionError as e:
     print ("HTTP Connection Error")
@@ -41,14 +43,25 @@ if not r == None:
                 heads=row.find_all("th")
                 cells = row.find_all("td")
                 if len(heads) > 0:
-                    date = heads[2].text
+                    date = datetime.datetime(heads[2].text)
                 elif len(cells) > 0:
                     symb = cells[0].text
                     den = cells[1].text
-                    val = cells[2].text 
-                    inc = cells[3].text
-            m = {"info":c, "data":d}        
-            mem["monezi"].append(m)
+                    val = float(cells[2].text)
+                    inc = float(cells[3].text)
+                if symb in mem["monezi"].keys:
+                    m = mem["monezi"][symb]
+                    c=m["info"]
+                    d=m["data"]
+                else:
+                    d={'Data': [], 'Valoare': [], "Crestere":[], "Predicts":[]}
+                    c={'idx':0, 'Simbol':symb, 'Name':den, 'Country':'', 'Data_from':date, 'Data_to':date, 'days_predicted':1, 'spread':0, 'success_rate':0, 'max_devia_allow':0, 'avg_devia':0}
+                    m = {"info":c, "data":d}
+                    mem["monezi"][symb] = m
+                d["Data"].append(date)
+                d["Valoare"].append(val)
+                d["Crestere"].append(inc)
+                c["Data_to"] = date
         
 with open('cupro.pickle', 'wb') as f:
     pickle.dump(mem, f)

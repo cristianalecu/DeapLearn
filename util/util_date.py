@@ -15,6 +15,32 @@ def date_format():
     #print(str(now))
     return now.strftime("%Y-%m-%d-%H-%M-%S-%f")
 
+def next_working_date(date):
+    from dateutil import rrule
+    
+    holidays = [
+        datetime.date(2012, 5, 1,),
+        datetime.date(2012, 6, 1,),
+        # ...
+    ]
+    
+    # Create a rule to recur every weekday starting today
+    r = rrule.rrule(rrule.DAILY,
+                    byweekday=[rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR],
+                    dtstart=datetime.date.today())
+    
+    # Create a rruleset
+    rs = rrule.rruleset()
+    
+    # Attach our rrule to it
+    rs.rrule(r)
+    
+    # Add holidays as exclusion days
+    for exdate in holidays:
+        rs.exdate(exdate)
+    
+    return (rs[0])
+
 t1=datetime.datetime(2017,10,29,0,0,0)
 t2=datetime.datetime(2017,10,30,0,0,0)
 t3=t1 + datetime.timedelta(days=1)
