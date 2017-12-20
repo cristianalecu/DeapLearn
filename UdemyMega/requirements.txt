@@ -1,0 +1,13 @@
+numpy
+ipython
+jupyter
+ipykernel
+
+matplotlib
+pandas
+xlrd
+
+folium
+
+sklearn
+scipy

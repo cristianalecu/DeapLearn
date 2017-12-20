@@ -5,7 +5,7 @@ import math
 import datetime
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression   
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt 
 from matplotlib import style
 import pickle
 
