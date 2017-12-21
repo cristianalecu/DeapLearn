@@ -9,7 +9,6 @@ from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt 
 from matplotlib import style
-from numpy.lib.function_base import range
 
 mem = {}
 
@@ -92,49 +91,58 @@ for datex in dates:
                         c["Data_to"] = date
             mem["last_date"] = datex
 
-df = pd.DataFrame.from_dict(mem["monezi"]['EUR']['data'])
-df.set_index("Data", inplace=True)
+df0 = pd.DataFrame.from_dict(mem["monezi"]['EUR']['data'])
+df0.set_index("Data", inplace=True)
+print(df0.tail(50))
+
+predicts = []
 
 days_to_learn = 7             #learn to predict a number of days is the future
-step_back = 8
-predictions = 4
+step_back = 7
+predictions = 3
 
 forecast_col = "Valoare";
-df=df[["Valoare","Crestere"]]
-df.fillna(-99999, inplace = True)
-df["label"] = df[forecast_col].shift(-days_to_learn)  # Value in the future 7 days
-
-x = np.array(df.drop(['label'], 1))  # columns without label 
-y = np.array(df['label'])            # array from column label
-
-x = preprocessing.scale(x)
-
-style.use('ggplot')
-plt.plot(df.index.tolist(),df['Valoare'].tolist(),"blue")
-
 for step in range(predictions):
     days_to_predict = days_to_learn + step_back*step
-    x_lately = x[-days_to_predict:]
-    x = x[:-days_to_predict]
+    df=df0[["Valoare","Crestere"]]
+    df = df[:-days_to_predict]                
+    df["label"] = df[forecast_col].shift(-days_to_learn) 
 
-    d = np.array ( df.index.values )
+    print(df.tail(50))
+    
+    x = np.array(df.drop(['label'], 1))  # columns without label 
+    y = np.array(df['label'])            # array from column label
+    
+    x = preprocessing.scale(x)    
+    
+    x_lately = x[-days_to_learn:]
+    x = x[:-days_to_learn]
+
+    d = np.array ( df0.index.values )
     d = d[-days_to_predict:]
 
-    df.dropna(inplace=True)
-    y = np.array(df['label'])  
+    y = y[:-days_to_learn] 
 
-    x_train, x_test, y_train, y_test = cross_validation.train_test_split(x, y, test_size=0.1) # shuffle and use 20% data as test data 
+    #x_train, x_test, y_train, y_test = cross_validation.train_test_split(x, y, test_size=0.1) # shuffle and use 20% data as test data 
 
     clf = LinearRegression()
-    clf.fit(x_train, y_train)
+    clf.fit(x, y)
 
     forecast_set = clf.predict(x_lately)
 
     prediction = {"data":[], "val":[]}
-    for i in range(len(forecast_set) - 1):
+    for i in range(len(forecast_set)):
         prediction["data"].append(d[i])
         prediction["val"].append(forecast_set[i])
-
+    predicts.append(prediction)
+    
+style.use('ggplot')
+dates = df0.index.tolist()
+dates = dates[-(days_to_learn + step_back*predictions):]
+vals = df0['Valoare'].tolist()
+vals = vals[-(days_to_learn + step_back*predictions):]
+plt.plot(dates,vals,"blue")
+for prediction in predicts:
     plt.plot(prediction["data"],prediction["val"],"red")
 plt.show()
 
