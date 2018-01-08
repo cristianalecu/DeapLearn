@@ -11,3 +11,5 @@ folium
 
 sklearn
 scipy
+
+flask

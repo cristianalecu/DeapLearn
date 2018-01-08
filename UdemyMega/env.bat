@@ -16,7 +16,7 @@ cd ..\DeapLearn\UdemyMega\
 
 call ..\..\venv\venv_dml2\Scripts\activate.bat  
 
-set https_proxy=http://192.168.1.29:8080
+rem set https_proxy=http://192.168.1.29:8080
 
 
 if [%1] == [r] call pip install -r requirements.txt
