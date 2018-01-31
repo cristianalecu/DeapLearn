@@ -4,7 +4,7 @@ install PostgreSQL www.postgresql.org
 
 install heroku CLI from https://devcenter.heroku.com/articles/heroku-cli#windows 
 
->hroku login
+>heroku login
 >heroku create financiar
  (https://financiar.herokuapp.com/ | https://git.heroku.com/financiar.git)
  >heroku apps
