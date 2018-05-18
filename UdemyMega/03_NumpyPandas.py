@@ -40,6 +40,14 @@ print(df7)
 
 
 from geopy.geocoders import Nominatim
+
+# import os
+# proxy_addr = 'http://{user}:{passwd}@{address}:{port}'.format(
+#     user='cna', passwd='5tyuiop[]', 
+#     address='192.168.1.29', port=int('8080'))
+# os.environ['http_proxy'] = proxy_addr
+# os.environ['https_proxy'] = proxy_addr
+    
 nom=Nominatim(scheme="http")
 n=nom.geocode("1 Calea Apeductului, Bucharest, Romania")
 print(n)
@@ -53,7 +61,9 @@ df7["Latitude"] = df7["Coord"].apply(lambda x: x.latitude if x != None else None
 df7["Longitude"] = df7["Coord"].apply(lambda x: x.longitude if x != None else None)
 print(df7)
 
-
+# os.environ.pop('http_proxy')
+# os.environ.pop('https_proxy')
+    
 # pip install opencv-python
 # pip install ipykernel
 # python -m ipykernel install --user --name=venv_dml
@@ -71,7 +81,7 @@ im_g = cv2.imread("smallgray.png",0)
 print(im_g[0:2,2:4])
 
 for i in im_g:
-    print(i)
+    print(i) 
 for i in im_g.T:
     print(i)
 for i in im_g.flat:

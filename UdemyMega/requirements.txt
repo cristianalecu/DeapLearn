@@ -8,6 +8,9 @@ pandas
 xlrd
 
 folium
+geopy
+opencv-python
+
 
 sklearn
 scipy
@@ -17,4 +20,4 @@ flask
 requests
 beautifulsoup4
 pickleshare
-
+pyinstaller
