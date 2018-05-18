@@ -1,9 +1,0 @@
-pandas
-folium
-geopy
-ipython
-jupyter
-xlrd
-
-matplotlib
-
