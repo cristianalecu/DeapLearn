@@ -13,8 +13,3 @@ sklearn
 scipy
 
 flask
-
-requests
-beautifulsoup4
-pickleshare
-

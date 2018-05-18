@@ -1,7 +1,0 @@
-requests
-beautifulsoup4
-pickleshare
-pandas
-sklearn
-scipy
-matplotlib
