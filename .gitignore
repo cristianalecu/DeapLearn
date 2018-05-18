@@ -1,6 +1,5 @@
-.metadata/
-
+__pycache__
+.metadata
 .project
 .pydevproject
-
-Jupyter/.ipynb_checkpoints/
+.ipynb_checkpoints
